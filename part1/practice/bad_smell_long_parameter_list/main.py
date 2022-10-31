@@ -11,40 +11,30 @@
 
 
 class Unit:
-    def move(self, field, x_coord, y_coord, direction, is_fly, crawl, speed = 1):
 
-        if is_fly and crawl:
+    def __init__(self, state, field, x_coord, y_coord, speed=1):
+        self.state = state
+        self.field = field
+        self.x_coord = x_coord
+        self.y_coord = y_coord
+        self.speed = speed
+
+    def move(self, field, direction):
+        speed = self._get_speed()
+
+        if direction == 'UP':
+            field.set_unit(x=self.x_coord, y=self.y_coord + speed, unit=self)
+        elif direction == 'DOWN':
+            field.set_unit(x=self.x_coord, y=self.y_coord - speed, unit=self)
+        elif direction == 'LEFT':
+            field.set_unit(x=self.x_coord - speed, y=self.y_coord, unit=self)
+        elif direction == 'RIGHT':
+            field.set_unit(x=self.x_coord + speed, y=self.y_coord, unit=self)
+
+    def _get_speed(self):
+        if self.state == 'fly':
+            return 1.2 * self.speed
+        elif self.state == 'crawl':
+            return 0.5 * self.speed
+        else:
             raise ValueError('Рожденный ползать летать не должен!')
-
-        if is_fly:
-            speed *= 1.2
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
-        if crawl:
-            speed *= 0.5
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
-
-            field.set_unit(x=new_x, y=new_y, unit=self)
-
-#     ...
